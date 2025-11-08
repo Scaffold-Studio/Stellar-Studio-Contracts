@@ -1,0 +1,83 @@
+### Stellar Studio - Development Configuration
+### Factory-based smart contract deployment system
+
+[development.network]
+rpc-url = "http://localhost:8000/rpc"
+network-passphrase = "Standalone Network ; February 2017"
+run-locally = true
+
+[[development.accounts]]
+name = "me"
+default = true
+
+[development.contracts]
+# ===== FACTORY SYSTEM =====
+# MasterFactory - Deploys and manages all other factories
+master_factory = { client = true, constructor_args = "--admin me" }
+
+# TokenFactory - Deploys token contracts programmatically
+token_factory = { client = true, constructor_args = "--admin me" }
+
+# NFTFactory - Deploys NFT contracts programmatically
+nft_factory = { client = true, constructor_args = "--admin me" }
+
+# GovernanceFactory - Deploys governance contracts programmatically
+governance_factory = { client = true, constructor_args = "--admin me" }
+
+# ===== EXAMPLE/TEMPLATE CONTRACTS =====
+# These are reference implementations - their WASMs are used by factories
+# Note: Contract names in environments.toml use snake_case (converted from kebab-case package names)
+# These contracts are deployed for testing, but their primary use is as WASM templates for factories
+
+# Token Examples - All constructor args complete ✅
+fungible_allowlist_example = { client = true, constructor_args = "--admin me --manager me --initial_supply 1000000 --name 'Allowlist Token' --symbol 'ALT' --decimals 7" }
+fungible_blocklist_example = { client = true, constructor_args = "--admin me --manager me --initial_supply 1000000 --name 'Blocklist Token' --symbol 'BLT' --decimals 7" }
+fungible_capped_example = { client = true, constructor_args = "--admin me --manager me --initial_supply 1000000 --cap 10000000 --name 'Capped Token' --symbol 'CAP' --decimals 7" }
+fungible_pausable_example = { client = true, constructor_args = "--admin me --manager me --initial_supply 1000000 --name 'Pausable Token' --symbol 'PAU' --decimals 7" }
+# Vault requires a deployed token contract address (not account address)
+# Using deployed fungible_allowlist_example contract as the asset
+fungible_vault_example = { client = true, constructor_args = "--asset CA3R2GT7WBS4X737U7BA5B3THZFRZS5HID2FAYOLKLEFHWMB5TWPPLOR --decimals_offset 0" }
+
+# NFT Examples - All constructor args complete ✅
+nft_enumerable_example = { client = true, constructor_args = "--owner me" }
+nft_royalties_example = { client = true, constructor_args = "--admin me --manager me" }
+nft_access_control_example = { client = true, constructor_args = "--admin me" }
+
+# Governance Examples
+# Merkle Voting requires a root hash (32 bytes hex) for the merkle tree
+merkle_voting_example = { client = true, constructor_args = "--root_hash bebf6c4cc5f0a2f3d8bf7400f03b0897bee50ad1d93acf50be48cd477308ce8a" }
+
+# Note: These contracts are built for their WASMs to be used by the factories.
+# The factories deploy them programmatically via deploy_token(), deploy_nft(), etc.
+
+### Staging environment (Testnet)
+[staging.network]
+rpc-url = "https://soroban-testnet.stellar.org"
+network-passphrase = "Test SDF Network ; September 2015"
+
+[[staging.accounts]]
+name = "testnet-user"
+default = true
+
+[staging.contracts]
+# Deploy contracts to testnet after local testing
+# master_factory = { id = "C..." }
+# token_factory = { id = "C..." }
+# nft_factory = { id = "C..." }
+# governance_factory = { id = "C..." }
+
+### Production environment (Mainnet)
+[production.network]
+rpc-url = "https://soroban-mainnet.stellar.org"
+network-passphrase = "Public Global Stellar Network ; September 2015"
+
+[[production.accounts]]
+name = "mainnet-deployer"
+default = true
+
+[production.contracts]
+# Production contract addresses (after thorough testing)
+# master_factory = { id = "C..." }
+# token_factory = { id = "C..." }
+# nft_factory = { id = "C..." }
+# governance_factory = { id = "C..." }
