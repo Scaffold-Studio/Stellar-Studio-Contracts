@@ -456,8 +456,8 @@ __constructor(root_hash)
 
 ```bash
 # Clone repository
-git clone https://github.com/stellar-studio/stellar-studio-contracts.git
-cd stellar-studio-contracts
+git clone https://github.com/Scaffold-Studio/Stellar-Studio-Contracts.git
+cd Stellar-Studio-Contracts
 
 # Build all contracts
 stellar contract build
