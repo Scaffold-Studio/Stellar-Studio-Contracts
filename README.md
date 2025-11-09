@@ -1,12 +1,12 @@
 <div align="center">
 
-![Stellar Studio Banner](./public/stellar-banner.jpeg)
+![Stellar Studio Banner](https://raw.githubusercontent.com/Scaffold-Studio/stellar-studio-brand-assets/main/scaffold-studio-banner.png)
 
 # Stellar Studio Contracts
 
-**Production-Ready Soroban Smart Contracts**
+**Deploy and command Stellar tokens, NFTs, and DAOs through conversation.**
 
-Factory deployment system for tokens, NFTs, and governance on Stellar
+Production-ready Soroban blueprints powering our conversational factory system for tokens, NFTs, and governance on Stellar.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Stellar](https://img.shields.io/badge/Stellar-Soroban-7D00FF)](https://stellar.org)
@@ -20,7 +20,7 @@ Factory deployment system for tokens, NFTs, and governance on Stellar
 
 ## Overview
 
-Stellar Studio Contracts is a comprehensive suite of production-ready Soroban smart contracts implementing the factory pattern for efficient contract deployment. Built with Rust and OpenZeppelin Stellar libraries, the system enables programmatic deployment of tokens, NFTs, and governance contracts on the Stellar network.
+Stellar Studio Contracts is a comprehensive suite of production-ready Soroban smart contracts implementing the factory pattern for efficient deployment and post-deployment control. Built with Rust and OpenZeppelin Stellar libraries, the system enables programmatic deployment of tokens, NFTs, and governance contracts—and the on-chain operations they require—on the Stellar network.
 
 **What's Included:**
 - 4 Factory Contracts (Master, Token, NFT, Governance)
@@ -52,6 +52,8 @@ Stellar Studio Contracts is a comprehensive suite of production-ready Soroban sm
 ### Factory Pattern System
 
 The contracts implement a three-tier factory architecture for efficient contract deployment:
+
+![Contract Architecture Overview](https://raw.githubusercontent.com/Scaffold-Studio/stellar-studio-brand-assets/main/Contract%20Architecture%20Overview.png)
 
 ```mermaid
 graph TB
@@ -695,6 +697,8 @@ Each generated package includes:
 ---
 
 ## Project Structure
+
+![Contracts Repository Structure](https://raw.githubusercontent.com/Scaffold-Studio/stellar-studio-brand-assets/main/Contracts%20Repository%20Structure.png)
 
 ```
 stellar-studio-contracts/
