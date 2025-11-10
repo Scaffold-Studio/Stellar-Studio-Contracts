@@ -44,6 +44,9 @@ pub struct NFTConfig {
     pub admin: Option<Address>,             // For Royalties and Access Control NFTs
     pub manager: Option<Address>,           // For Royalties NFT
     pub salt: BytesN<32>,
+    pub name: Option<String>,               // NFT collection name (default: "My Token")
+    pub symbol: Option<String>,             // NFT collection symbol (default: "TKN")
+    pub base_uri: Option<String>,           // Base URI for token metadata (default varies by type)
 }
 
 #[contracttype]
@@ -54,6 +57,8 @@ pub struct NFTInfo {
     pub owner: Address,
     pub timestamp: u64,
     pub name: Option<String>,
+    pub symbol: Option<String>,
+    pub base_uri: Option<String>,
 }
 
 #[contractevent]
@@ -216,34 +221,57 @@ impl NFTFactory {
         // Validate config based on NFT type
         Self::validate_config(&e, &config);
 
+        // Get metadata with defaults
+        let name = config.name.clone().unwrap_or_else(|| String::from_str(&e, "My Token"));
+        let symbol = config.symbol.clone().unwrap_or_else(|| String::from_str(&e, "TKN"));
+
         // Deploy using deployer pattern with constructor args based on NFT type
         let nft_address = match config.nft_type {
             NFTType::Enumerable => {
-                // Enumerable NFT requires only owner
-                let constructor_args: Vec<Val> = (config.owner.clone(),).into_val(&e);
+                // Enumerable NFT constructor signature: (owner, base_uri, name, symbol)
+                let base_uri = config.base_uri.clone().unwrap_or_else(|| String::from_str(&e, "www.mytoken.com"));
+                let constructor_args: Vec<Val> = (
+                    config.owner.clone(),
+                    base_uri,
+                    name.clone(),
+                    symbol.clone(),
+                ).into_val(&e);
                 e.deployer()
                     .with_address(e.current_contract_address(), config.salt)
                     .deploy_v2(wasm_hash, constructor_args)
             }
             NFTType::Royalties => {
-                // Royalties NFT constructor signature: (admin, manager)
+                // Royalties NFT constructor signature: (admin, manager, base_uri, name, symbol)
                 let admin = config.admin.clone().unwrap_or_else(|| {
                     panic_with_error!(&e, NFTFactoryError::InvalidConfig)
                 });
                 let manager = config.manager.clone().unwrap_or_else(|| {
                     panic_with_error!(&e, NFTFactoryError::InvalidConfig)
                 });
-                let constructor_args: Vec<Val> = (admin, manager).into_val(&e);
+                let base_uri = config.base_uri.clone().unwrap_or_else(|| String::from_str(&e, "https://example.com/nft/"));
+                let constructor_args: Vec<Val> = (
+                    admin,
+                    manager,
+                    base_uri,
+                    name.clone(),
+                    symbol.clone(),
+                ).into_val(&e);
                 e.deployer()
                     .with_address(e.current_contract_address(), config.salt)
                     .deploy_v2(wasm_hash, constructor_args)
             }
             NFTType::AccessControl => {
-                // Access Control NFT constructor signature: (admin)
+                // Access Control NFT constructor signature: (admin, base_uri, name, symbol)
                 let admin = config.admin.clone().unwrap_or_else(|| {
                     panic_with_error!(&e, NFTFactoryError::InvalidConfig)
                 });
-                let constructor_args: Vec<Val> = (admin,).into_val(&e);
+                let base_uri = config.base_uri.clone().unwrap_or_else(|| String::from_str(&e, "www.mytoken.com"));
+                let constructor_args: Vec<Val> = (
+                    admin,
+                    base_uri,
+                    name.clone(),
+                    symbol.clone(),
+                ).into_val(&e);
                 e.deployer()
                     .with_address(e.current_contract_address(), config.salt)
                     .deploy_v2(wasm_hash, constructor_args)
@@ -256,7 +284,9 @@ impl NFTFactory {
             nft_type: config.nft_type.clone(),
             owner: config.owner.clone(),
             timestamp: e.ledger().timestamp(),
-            name: None,
+            name: Some(name),
+            symbol: Some(symbol),
+            base_uri: config.base_uri.clone(),
         };
 
         let mut nfts: Vec<NFTInfo> = e

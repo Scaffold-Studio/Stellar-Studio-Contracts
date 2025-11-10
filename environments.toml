@@ -39,9 +39,9 @@ fungible_pausable_example = { client = true, constructor_args = "--admin me --ma
 fungible_vault_example = { client = true, constructor_args = "--asset CA3R2GT7WBS4X737U7BA5B3THZFRZS5HID2FAYOLKLEFHWMB5TWPPLOR --decimals_offset 0" }
 
 # NFT Examples - All constructor args complete ✅
-nft_enumerable_example = { client = true, constructor_args = "--owner me" }
-nft_royalties_example = { client = true, constructor_args = "--admin me --manager me" }
-nft_access_control_example = { client = true, constructor_args = "--admin me" }
+nft_enumerable_example = { client = true, constructor_args = "--owner me --base_uri 'www.mytoken.com' --name 'My Token' --symbol 'TKN'" }
+nft_royalties_example = { client = true, constructor_args = "--admin me --manager me --base_uri 'https://example.com/nft/' --name 'Royalty NFT' --symbol 'RNFT'" }
+nft_access_control_example = { client = true, constructor_args = "--admin me --base_uri 'www.mytoken.com' --name 'My Token' --symbol 'TKN'" }
 
 # Governance Examples
 # Merkle Voting requires a root hash (32 bytes hex) for the merkle tree

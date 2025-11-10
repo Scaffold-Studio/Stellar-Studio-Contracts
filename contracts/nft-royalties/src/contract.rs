@@ -14,13 +14,8 @@ pub struct ExampleContract;
 
 #[contractimpl]
 impl ExampleContract {
-    pub fn __constructor(e: &Env, admin: Address, manager: Address) {
-        Base::set_metadata(
-            e,
-            String::from_str(e, "https://example.com/nft/"),
-            String::from_str(e, "Royalty NFT"),
-            String::from_str(e, "RNFT"),
-        );
+    pub fn __constructor(e: &Env, admin: Address, manager: Address, base_uri: String, name: String, symbol: String) {
+        Base::set_metadata(e, base_uri, name, symbol);
 
         // Set default royalty for the entire collection (10%)
         Base::set_default_royalty(e, &admin, 1000);
